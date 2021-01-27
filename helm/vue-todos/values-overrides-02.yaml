@@ -1,0 +1,5 @@
+containerPort: 8080
+
+image:
+  repository: quay.io/xymox/vue-todos-02
+
