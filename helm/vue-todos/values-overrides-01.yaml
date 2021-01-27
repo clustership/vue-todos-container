@@ -1,10 +1,23 @@
-containerPort: 8080
+containerPort: 80
 
 securityContext:
-  runAsUser: 1000
+  privileged: true
+#  runAsUser: 1000
 
-#  privileged: true
-
+#
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+# LOT of unused stuff
+#
+#
+#
+#
 volumes:
 - name: hostroot
   hostPath:
