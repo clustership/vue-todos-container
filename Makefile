@@ -27,8 +27,11 @@ push: build
 	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
 	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
 
+run:
+	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG) -p 8080:8080
+
 shell:
-	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(TAG) /bin/bash
+	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG) /bin/bash
 
 tag-latest: tag
 	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):latest
