@@ -1,0 +1,15 @@
+containerPort: 8080
+
+securityContext:
+  runAsUser: 1000
+
+#  privileged: true
+
+volumes:
+- name: hostroot
+  hostPath:
+    path: /
+
+volumemounts:
+- mountPath: /host
+  name: hostroot
