@@ -2,6 +2,7 @@ IMAGE_TAG=$(shell ./tools/image-tag)
 IMAGE_BRANCH_TAG=$(shell ./tools/image-tag branch)
 NS ?= xymox
 REPOSITORY ?= quay.io
+PORT=8080:8080
 
 IMAGE_NAME ?= vue-todos
 DOCKER = docker
@@ -28,7 +29,7 @@ push: build
 	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
 
 run:
-	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG) -p 8080:8080
+	$(DOCKER) run --rm --name $(IMAGE_NAME) -p $(PORT) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
 
 shell:
 	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG) /bin/bash
