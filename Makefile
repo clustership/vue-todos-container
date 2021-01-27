@@ -21,12 +21,16 @@ build: Dockerfile
 
 build-ubi8: Dockerfile
 	$(DOCKER) build -t $(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG) -f $(DOCKERFILE).ubi8 .
-	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
-	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG)
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_BRANCH_TAG)
 
 push: build
 	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
 	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
+
+push-ubi8: build-ubi8
+	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG)
+	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_BRANCH_TAG)
 
 run:
 	$(DOCKER) run --rm --name $(IMAGE_NAME) -p $(PORT) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
