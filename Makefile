@@ -1,5 +1,6 @@
+IMAGE_TAG=$(shell ./tools/image-tag)
+IMAGE_BRANCH_TAG=$(shell ./tools/image-tag branch)
 NS ?= xymox
-VERSION ?= 0.1.1
 REPOSITORY ?= quay.io
 
 IMAGE_NAME ?= vue-todos
@@ -10,28 +11,31 @@ DOCKERFILE = Dockerfile
 .PHONY: build push shell release
 
 build-nocache: Dockerfile
-	$(DOCKER) build --rm --no-cache -t $(NS)/$(IMAGE_NAME):$(VERSION) -f $(DOCKERFILE) .
+	$(DOCKER) build --rm --no-cache -t $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) -f $(DOCKERFILE) .
 
 build: Dockerfile
-	$(DOCKER) build -t $(NS)/$(IMAGE_NAME):$(VERSION) -f $(DOCKERFILE) .
+	$(DOCKER) build -t $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) -f $(DOCKERFILE) .
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
 
 build-ubi8: Dockerfile
-	$(DOCKER) build -t $(NS)/$(IMAGE_NAME)-ubi8:$(VERSION) -f $(DOCKERFILE).ubi8 .
-
-tag:
-	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(VERSION) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(VERSION)
+	$(DOCKER) build -t $(NS)/$(IMAGE_NAME)-ubi8:$(IMAGE_TAG) -f $(DOCKERFILE).ubi8 .
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
 
 push: build
-	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(VERSION)
+	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_TAG)
+	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(IMAGE_BRANCH_TAG)
 
 shell:
-	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(VERSION) /bin/bash
+	$(DOCKER) run --rm --name $(IMAGE_NAME) -ti $(REPOSITORY)/$(NS)/$(IMAGE_NAME):$(TAG) /bin/bash
 
 tag-latest: tag
-	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(VERSION) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):latest
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):latest
   
 push-latest: tag-latest
-  make push -e VERSION=latest
+	$(DOCKER) tag $(NS)/$(IMAGE_NAME):$(IMAGE_TAG) $(REPOSITORY)/$(NS)/$(IMAGE_NAME):latest
+	$(DOCKER) push $(REPOSITORY)/$(NS)/$(IMAGE_NAME):latest
 
 release: push-latest push tag build
 
