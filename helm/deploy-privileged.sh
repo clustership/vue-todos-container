@@ -4,7 +4,7 @@ IMAGE_TAG=$(../tools/image-tag)
 
 echo ${IMAGE_TAG}
 
-NS=meetup-demo-${IMAGE_TAG}
+NS=meetup-demo-01
 NS=$(tr "[A-Z]" "[a-z]" <<<$NS)
 APP=vtodos
 
@@ -23,7 +23,8 @@ oc project ${NS}
 oc adm policy add-scc-to-user privileged -z vtodos-vue-todos
 #
 
+echo "Now run: "
 echo helm install --set image.tag=${IMAGE_TAG} -f vue-todos/values-overrides-01.yaml ${APP} vue-todos
 # helm install --set image.tag=${IMAGE_TAG} ${APP} vue-todos
-helm install --set image.tag=${IMAGE_TAG} -f vue-todos/values-overrides-01.yaml ${APP} vue-todos
+# helm install --set image.tag=${IMAGE_TAG} -f vue-todos/values-overrides-01.yaml ${APP} vue-todos
 # echo helm template --set image.tag=${IMAGE_TAG} ${APP} vue-todos

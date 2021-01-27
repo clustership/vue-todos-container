@@ -2,7 +2,7 @@
 
 IMAGE_TAG=$(../tools/image-tag)
 
-NS=meetup-demo-${IMAGE_TAG}
+NS=meetup-demo-01
 NS=$(tr "[A-Z]" "[a-z]" <<<$NS)
 
 oc project ${NS}
