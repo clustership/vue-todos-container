@@ -11,5 +11,4 @@ RUN git clone https://github.com/clustership/vue-todos.git \
 # FROM registry.redhat.io/ubi8
 FROM nginx
 
-
 COPY --from=builder /src/vue-todos/dist /usr/share/nginx/html
